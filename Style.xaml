@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="OnOffButton" TargetType="Button">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=Watching}" Value="True">
+                <Setter Property="Content">
+                    <Setter.Value>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Resources/online.png" />
+                            <TextBlock Margin="3,0,0,0">开始</TextBlock>
+                        </StackPanel>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Watching}" Value="False">
+                <Setter Property="Content">
+                    <Setter.Value>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Resources/offline.png" />
+                            <TextBlock Margin="3,0,0,0">暂停</TextBlock>
+                        </StackPanel>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>
