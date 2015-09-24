@@ -22,14 +22,13 @@ namespace FileWatcher
         public MainWindow()
         {
             InitializeComponent();
-
-            //btnStartStop.Click += new RoutedEventHandler(toggleWatching);
+            this.btnSetting.Click += new RoutedEventHandler(openSettingWindow);
         }
 
-        //void toggleWatching(object sender, RoutedEventArgs e)
-        //{
-        //    var viewmodel = this.DataContext as MainWindowViewModel;
-        //    viewmodel.Watching = !viewmodel.Watching;
-        //}
+        void openSettingWindow(object sender, RoutedEventArgs e)
+        {
+            SettingWindow window = new SettingWindow();
+            window.ShowDialog();
+        }
     }
 }
