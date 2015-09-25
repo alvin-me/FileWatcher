@@ -22,13 +22,6 @@ namespace FileWatcher
         public MainWindow()
         {
             InitializeComponent();
-            this.btnSetting.Click += new RoutedEventHandler(openSettingWindow);
-        }
-
-        void openSettingWindow(object sender, RoutedEventArgs e)
-        {
-            SettingWindow window = new SettingWindow();
-            window.ShowDialog();
         }
     }
 }

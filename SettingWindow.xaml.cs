@@ -37,9 +37,9 @@ namespace FileWatcher
             {
                 this.cmbWatchFileType.Items.Add(item.Key);
             }
-            int idx = Properties.Settings.Default.WatchFileType;
-            if (idx >= 0 && idx < MainWindowModel.FileTypeDict.Count)
-                this.cmbWatchFileType.SelectedIndex = idx;
+
+            if(MainWindowModel.FileTypeDict.ContainsKey(Properties.Settings.Default.WatchFileType))
+                this.cmbWatchFileType.SelectedValue = Properties.Settings.Default.WatchFileType;
             else
                 this.cmbWatchFileType.SelectedIndex = MainWindowModel.FileTypeDict.Count - 1;
         }
@@ -49,7 +49,7 @@ namespace FileWatcher
             Properties.Settings.Default.WatchFolder = this.txtWatchFolder.Text;
             Properties.Settings.Default.LogFolder = this.txtLogFolder.Text;
             Properties.Settings.Default.WatchSubDir = (this.ckWatchSubDir.IsChecked == true);
-            Properties.Settings.Default.WatchFileType = this.cmbWatchFileType.SelectedIndex;
+            Properties.Settings.Default.WatchFileType = (this.cmbWatchFileType.SelectedValue as string);
             Properties.Settings.Default.Save();
         }
 
@@ -58,10 +58,11 @@ namespace FileWatcher
             if ((Properties.Settings.Default.WatchFolder != this.txtWatchFolder.Text)
                 || (Properties.Settings.Default.LogFolder != this.txtLogFolder.Text)
                 || (Properties.Settings.Default.WatchSubDir != (this.ckWatchSubDir.IsChecked == true))
-                || (Properties.Settings.Default.WatchFileType != this.cmbWatchFileType.SelectedIndex))
+                || (Properties.Settings.Default.WatchFileType != (this.cmbWatchFileType.SelectedValue as string)))
             {
                 saveSettings(null, null);
             }
+            base.DialogResult = true;
             base.OnClosing(e);
         }
 
