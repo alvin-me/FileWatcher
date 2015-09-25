@@ -113,13 +113,15 @@
     <Resource Include="Resources\clear.png" />
     <Resource Include="Resources\offline.png" />
     <Resource Include="Resources\online.png" />
-    <Resource Include="Resources\open.png" />
     <Resource Include="Resources\save.png" />
     <Resource Include="Resources\setting.png" />
     <Resource Include="Resources\start.png" />
     <Resource Include="Resources\stop.png" />
     <Resource Include="Resources\sub_dir.png" />
     <Resource Include="Resources\view_thumb.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\folder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
