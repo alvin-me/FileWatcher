@@ -59,6 +59,9 @@
     <Compile Include="ListBoxExtender.cs" />
     <Compile Include="MainWindowModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="MyFileSystemWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="RelayCommand.cs" />
     <Compile Include="SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>

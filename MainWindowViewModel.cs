@@ -22,7 +22,7 @@ namespace FileWatcher
          */
         private readonly FileInformation _domObject;
         private readonly ObservableCollection<FileInformation> _informations;
-        private readonly FileSystemWatcher _fileSystemWatcher;
+        private readonly MyFileSystemWatcher _fileSystemWatcher;
         private readonly ICommand _toggleWatchingCmd;
         private readonly ICommand _openSettingWindowCmd;
         private readonly ICommand _clearCollectionCmd;
@@ -341,14 +341,15 @@ namespace FileWatcher
         /// Create FileSystemWatcher
         /// </summary>
         /// <returns></returns>
-        private FileSystemWatcher createWatcher()
+        private MyFileSystemWatcher createWatcher()
         {
-            FileSystemWatcher watcher = new FileSystemWatcher();
+            var watcher = new MyFileSystemWatcher();
             watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.Size;
             watcher.Created += new FileSystemEventHandler(this.fileSystemWatching);
             watcher.Deleted += new FileSystemEventHandler(this.fileSystemWatching);
             watcher.Changed += new FileSystemEventHandler(this.fileSystemWatching);
             watcher.Renamed += new RenamedEventHandler(this.fileSystemWatching);
+            watcher.FilterRecentEvents = true;
             return watcher;
         }
 
