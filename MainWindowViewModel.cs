@@ -12,7 +12,8 @@ namespace FileWatcher
     {
         #region Private Variables
 
-        private bool _watchingFlag;
+        private bool _showPreview = true;
+        private bool _watchingFlag = false;
         private string[] _watchingFilter;
         private string _message;
         private string _messageBackup;
@@ -27,6 +28,7 @@ namespace FileWatcher
         private readonly ICommand _openSettingWindowCmd;
         private readonly ICommand _clearCollectionCmd;
         private readonly ICommand _saveCollectionCmd;
+        private readonly ICommand _toggleShowPreviewCmd;
 
         #endregion
 
@@ -40,9 +42,9 @@ namespace FileWatcher
             _openSettingWindowCmd = new RelayCommand(OpenSettingWindow, CanOpenSettingWindow);
             _clearCollectionCmd = new RelayCommand(ClearCollection, CanClearCollection);
             _saveCollectionCmd = new RelayCommand(SaveCollection, CanSaveCollection);
+            _toggleShowPreviewCmd = new RelayCommand(ToggleShowPreview, CanToggleShowPreview);
             _fileSystemWatcher = createWatcher();
             updateWatcherFromConfigFile();
-            LogInfo("未开始监听");
         }
 
         #endregion
@@ -175,6 +177,23 @@ namespace FileWatcher
             }
         }
 
+        /// <summary>
+        /// Gets or Sets Preview Flag. Ready to be binded to UI.
+        /// Impelments INotifyPropertyChanged which enables the binded element to refresh itself whenever the value changes.
+        /// </summary>
+        public bool ShowPreviewFlag
+        {
+            get { return _showPreview; }
+            set
+            {
+                if (_showPreview != value)
+                {
+                    _showPreview = value;
+                    OnPropertyChanged("ShowPreviewFlag");
+                }
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -198,6 +217,11 @@ namespace FileWatcher
         /// Gets the SaveCollectionCmd. Used for Open setting window Operations
         /// </summary>
         public ICommand SaveCollectionCmd { get { return _saveCollectionCmd; } }
+
+        /// <summary>
+        /// Gets the ToggleShowPreviewCmd. Used for Open setting window Operations
+        /// </summary>
+        public ICommand ToggleShowPreviewCmd { get { return _toggleShowPreviewCmd; } }
 
         /// <summary>
         /// CanToggleWatching operation of the ToggleWatching.
@@ -333,6 +357,28 @@ namespace FileWatcher
             }
         }
 
+        /// <summary>
+        /// CanToggleShowPreview operation of the ToggleShowPreview.
+        /// Tells us if the control is to be enabled or disabled.
+        /// This method will be fired repeatedly as long as the view is open.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public bool CanToggleShowPreview(object obj)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Add operation of the ToggleShowPreviewCmd.
+        /// Operation that will be performormed on the control click.
+        /// </summary>
+        /// <param name="obj"></param>
+        public void ToggleShowPreview(object obj)
+        {
+            ShowPreviewFlag = !ShowPreviewFlag;
+        }
+
         #endregion
 
         #region Private Methods
@@ -379,10 +425,12 @@ namespace FileWatcher
             }
             if (WatchingFlag)
             {
+                _fileSystemWatcher.EnableRaisingEvents = true;
                 LogInfo("正在监听...");
             }
             else
             {
+                _fileSystemWatcher.EnableRaisingEvents = false;
                 LogInfo("未开始监听");
             }
         }

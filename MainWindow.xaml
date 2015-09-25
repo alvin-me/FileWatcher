@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:properties="clr-namespace:FileWatcher.Properties"
         xmlns:local="clr-namespace:FileWatcher"
-        Title="文件系统监听" Height="350" Width="800" WindowStartupLocation="CenterScreen">
+        Title="文件系统监听" Height="512" Width="1024" WindowStartupLocation="CenterScreen">
     <DockPanel>
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
@@ -18,6 +18,12 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Source="Resources/save.png" />
                         <TextBlock Margin="3,0,0,0">保存</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button ToolTip="预览图片" Command="{Binding ToggleShowPreviewCmd}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/preview.png" />
+                        <TextBlock Margin="3,0,0,0">预览</TextBlock>
                     </StackPanel>
                 </Button>
                 <Separator />
@@ -59,19 +65,28 @@
             </StatusBarItem>
         </StatusBar>
 
-        <ListView Margin="4" IsSynchronizedWithCurrentItem="True" local:ListBoxExtender.AutoScrollToCurrentItem="True"
+        <Grid Margin="4" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+
+            <ListView IsSynchronizedWithCurrentItem="True" local:ListBoxExtender.AutoScrollToCurrentItem="True"
                   ItemsSource="{Binding Path=FileInformations, Mode=OneWay}"
                   SelectedItem="{Binding Path=SelectedFileInformation, Mode=OneWayToSource}"
                   SelectedIndex="{Binding Path=Id, Mode=TwoWay}" SelectionMode="Single">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="ID" Width="27" DisplayMemberBinding="{Binding Path=Id}" />
-                    <GridViewColumn Header="时间" Width="150" DisplayMemberBinding="{Binding Path=TimeStamp}" />
-                    <GridViewColumn Header="事件" Width="70" DisplayMemberBinding="{Binding Path=EventType}" />
-                    <GridViewColumn Header="文件" Width="150" DisplayMemberBinding="{Binding Path=FileName}" />
-                    <GridViewColumn Header="路径" Width="350" DisplayMemberBinding="{Binding Path=FilePath}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" Width="27" DisplayMemberBinding="{Binding Path=Id}" />
+                        <GridViewColumn Header="时间" Width="150" DisplayMemberBinding="{Binding Path=TimeStamp}" />
+                        <GridViewColumn Header="事件" Width="70" DisplayMemberBinding="{Binding Path=EventType}" />
+                        <GridViewColumn Header="文件" Width="150" DisplayMemberBinding="{Binding Path=FileName}" />
+                        <GridViewColumn Header="路径" Width="350" DisplayMemberBinding="{Binding Path=FilePath}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1" Width="256" Margin="4,0,0,0" Style="{DynamicResource OnOffBorder}"/>
+        </Grid>
     </DockPanel>
 </Window>
