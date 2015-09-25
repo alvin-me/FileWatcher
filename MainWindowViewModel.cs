@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using System.IO;
 using System.Data;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -396,15 +397,26 @@ namespace FileWatcher
                 if (strArr.Length < 2 || strArr[1].Equals("$RECYCLE.BIN"))
                     return;
 
-                //Always create a new instance of patient before adding. 
-                //Otherwise we will endup sending the same instance that is binded, to the BL which will cause complications
-                var information = new FileInformation { Id = FileInformations.Count, 
-                    TimeStamp = DateTime.Now.ToString(), 
-                    EventType = e.ChangeType.ToString(), 
-                    FileName = strArr[strArr.Length - 1], 
-                    FilePath = e.FullPath };
-                FileInformations.Add(information);
-                SelectLastFileInformation();
+                //Filter Watching Files.
+                var ext = (Path.GetExtension(e.FullPath) ?? string.Empty).ToLower();
+                var all = ".*";
+                if (_watchingFilter.Any(ext.Equals) || _watchingFilter.Any(all.Equals) || _watchingFilter.Length == 0)
+                {
+                    //Always create a new instance of patient before adding. 
+                    //Otherwise we will endup sending the same instance that is binded, to the BL which will cause complications
+                    var information = new FileInformation
+                    {
+                        Id = FileInformations.Count,
+                        TimeStamp = DateTime.Now.ToString(),
+                        EventType = e.ChangeType.ToString(),
+                        FileName = strArr[strArr.Length - 1],
+                        FilePath = e.FullPath
+                    };
+                    FileInformations.Add(information);
+                    SelectLastFileInformation();
+                }
+
+
             }));
         }
 

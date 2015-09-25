@@ -7,13 +7,13 @@ namespace FileWatcher
     {
         public static Dictionary<string, string> Dict = new Dictionary<string, string>()
             {
-                {"位图(*.bmp;*.dib)", "*.bmp;*.dib"},
-                {"JPEG(*.jpg;*.jpeg;*.jpe;*.jfif)", "*.jpg;*.jpeg;*.jpe;*.jfif"},
-                {"GIF(*.jif)", "*.jif"},
-                {"TIFF(*.tif;*.tiff)", "*.tif;*.tiff"},
-                {"PNG(*.png)", "*.png"},
-                {"全部图像文件", "*.bmp;*.dib;*.jpg;*.jpeg;*.jpe;*.jfif;*.jif;*.tif;*.tiff;*.png"},
-                {"全部文件", "*.*"},
+                {"位图(*.bmp;*.dib)", ".bmp;.dib"},
+                {"JPEG(*.jpg;*.jpeg;*.jpe;*.jfif)", ".jpg;.jpeg;.jpe;.jfif"},
+                {"GIF(*.jif)", ".jif"},
+                {"TIFF(*.tif;*.tiff)", ".tif;.tiff"},
+                {"PNG(*.png)", ".png"},
+                {"全部图像文件", ".bmp;.dib;.jpg;.jpeg;.jpe;.jfif;.jif;.tif;.tiff;.png"},
+                {"全部文件", ".*"},
             };
     }
 
