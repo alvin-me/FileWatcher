@@ -33,15 +33,15 @@ namespace FileWatcher
             this.txtLogFolder.Text = Properties.Settings.Default.LogFolder;
             this.ckWatchSubDir.IsChecked = Properties.Settings.Default.WatchSubDir;
 
-            foreach(var item in MainWindowModel.FileTypeDict)
+            foreach (var item in FileType.Dict)
             {
                 this.cmbWatchFileType.Items.Add(item.Key);
             }
 
-            if(MainWindowModel.FileTypeDict.ContainsKey(Properties.Settings.Default.WatchFileType))
+            if (FileType.Dict.ContainsKey(Properties.Settings.Default.WatchFileType))
                 this.cmbWatchFileType.SelectedValue = Properties.Settings.Default.WatchFileType;
             else
-                this.cmbWatchFileType.SelectedIndex = MainWindowModel.FileTypeDict.Count - 1;
+                this.cmbWatchFileType.SelectedIndex = FileType.Dict.Count - 1;
         }
 
         private void saveSettings(object sender, RoutedEventArgs e)

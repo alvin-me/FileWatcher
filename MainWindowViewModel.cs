@@ -11,7 +11,7 @@ namespace FileWatcher
     {
         #region Private Variables
 
-        private bool _watching;
+        private bool _watchingFlag;
         private string[] _watchingFilter;
         private string _message;
         private string _messageBackup;
@@ -141,18 +141,18 @@ namespace FileWatcher
         }
 
         /// <summary>
-        /// Gets or Sets Watching state. Ready to be binded to UI.
+        /// Gets or Sets WatchingFlag. Ready to be binded to UI.
         /// Impelments INotifyPropertyChanged which enables the binded element to refresh itself whenever the value changes.
         /// </summary>
-        public bool Watching
+        public bool WatchingFlag
         {
-            get { return _watching; }
+            get { return _watchingFlag; }
             set
             {
-                if (_watching != value)
+                if (_watchingFlag != value)
                 {
-                    _watching = value;
-                    OnPropertyChanged("Watching");
+                    _watchingFlag = value;
+                    OnPropertyChanged("WatchingFlag");
                 }
             }
         }
@@ -217,8 +217,16 @@ namespace FileWatcher
         /// <param name="obj"></param>
         public void ToggleWatching(object obj)
         {
-            Watching = !Watching;
-            if (Watching)
+            if (!Directory.Exists(Properties.Settings.Default.WatchFolder))
+            {
+                LogInfo("未设置监听目录或监听目录不存在");
+                _fileSystemWatcher.EnableRaisingEvents = false;
+                WatchingFlag = false;
+                return;
+            }
+
+            WatchingFlag = !WatchingFlag;
+            if (WatchingFlag)
             {
                 _fileSystemWatcher.EnableRaisingEvents = true;
                 LogInfo("正在监听...");
@@ -273,8 +281,11 @@ namespace FileWatcher
         /// <param name="obj"></param>
         public void ClearCollection(object obj)
         {
-            FileInformations.Clear();
-            ResetFileInformation();
+            Application.Current.Dispatcher.Invoke((Action)(() =>
+            {
+                FileInformations.Clear();
+                ResetFileInformation();
+            }));
         }
 
         /// <summary>
@@ -345,13 +356,32 @@ namespace FileWatcher
         /// </summary>
         private void updateWatcherFromConfigFile()
         {
-            this._fileSystemWatcher.IncludeSubdirectories = Properties.Settings.Default.WatchSubDir;
-            this._fileSystemWatcher.Path = Properties.Settings.Default.WatchFolder;
-
-            if (MainWindowModel.FileTypeDict.ContainsKey(Properties.Settings.Default.WatchFileType))
+            if (Directory.Exists(Properties.Settings.Default.WatchFolder))
             {
-                string value = MainWindowModel.FileTypeDict[Properties.Settings.Default.WatchFileType];
+                this._fileSystemWatcher.Path = Properties.Settings.Default.WatchFolder;
+            }
+            else
+            {
+                LogInfo("未设置监听目录或监听目录不存在");
+                WatchingFlag = false;
+                _fileSystemWatcher.EnableRaisingEvents = false;
+                return;
+            }
+
+            this._fileSystemWatcher.IncludeSubdirectories = Properties.Settings.Default.WatchSubDir;
+
+            if (FileType.Dict.ContainsKey(Properties.Settings.Default.WatchFileType))
+            {
+                string value = FileType.Dict[Properties.Settings.Default.WatchFileType];
                 this._watchingFilter = value.Split(';');
+            }
+            if (WatchingFlag)
+            {
+                LogInfo("正在监听...");
+            }
+            else
+            {
+                LogInfo("未开始监听");
             }
         }
 
@@ -374,6 +404,7 @@ namespace FileWatcher
                     FileName = strArr[strArr.Length - 1], 
                     FilePath = e.FullPath };
                 FileInformations.Add(information);
+                SelectLastFileInformation();
             }));
         }
 
@@ -387,6 +418,22 @@ namespace FileWatcher
             EventType = string.Empty;
             FileName = string.Empty;
             FilePath = string.Empty;
+        }
+
+        /// <summary>
+        /// Select the last FileInformation properties which will in turn auto reset the UI aswell
+        /// </summary>
+        private void SelectLastFileInformation()
+        {
+            if (FileInformations.Count > 0)
+            {
+                var item = FileInformations[FileInformations.Count - 1];
+                Id = item.Id;
+                TimeStamp = item.TimeStamp;
+                EventType = item.EventType;
+                FileName = item.FileName;
+                FilePath = item.FilePath;
+            }
         }
 
         /// <summary>

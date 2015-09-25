@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace FileWatcher
 {
-    public class MainWindowModel
+    public class FileType
     {
-        public static Dictionary<string, string> FileTypeDict = new Dictionary<string, string>()
+        public static Dictionary<string, string> Dict = new Dictionary<string, string>()
             {
                 {"位图(*.bmp;*.dib)", "*.bmp;*.dib"},
                 {"JPEG(*.jpg;*.jpeg;*.jpe;*.jfif)", "*.jpg;*.jpeg;*.jpe;*.jfif"},
