@@ -86,7 +86,9 @@
                 </ListView.View>
             </ListView>
 
-            <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1" Width="256" Margin="4,0,0,0" Style="{DynamicResource OnOffBorder}"/>
+            <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1" Width="256" Margin="4,0,0,0" Style="{DynamicResource OnOffBorder}">
+                <Image Source="{Binding Path=FilePath, Mode=OneWay}"/>
+            </Border>
         </Grid>
     </DockPanel>
 </Window>

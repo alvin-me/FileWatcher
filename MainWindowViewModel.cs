@@ -464,8 +464,6 @@ namespace FileWatcher
                     FileInformations.Add(information);
                     SelectLastFileInformation();
                 }
-
-
             }));
         }
 
