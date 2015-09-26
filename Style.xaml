@@ -1,5 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:FileWatcher">
+
+    <!--Type Converter-->
+    <local:PathToBitmapImage x:Key="ConvPathToBitmapImage" />
+    
     <Style x:Key="OnOffButton" TargetType="Button">
         <Style.Triggers>
             <DataTrigger Binding="{Binding Path=WatchingFlag}" Value="True">

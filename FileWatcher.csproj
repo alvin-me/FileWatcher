@@ -62,6 +62,7 @@
     <Compile Include="MyFileSystemWatcher.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="PathToBitmapImage.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
@@ -129,6 +130,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\not_found.png" />
+    <Resource Include="Resources\not_image.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

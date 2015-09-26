@@ -87,7 +87,7 @@
             </ListView>
 
             <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1" Width="256" Margin="4,0,0,0" Style="{DynamicResource OnOffBorder}">
-                <Image Source="{Binding Path=FilePath, Mode=OneWay}"/>
+                <Image Source="{Binding Path=FilePath, Mode=OneWay, Converter={StaticResource ConvPathToBitmapImage}, UpdateSourceTrigger=PropertyChanged}"/>
             </Border>
         </Grid>
     </DockPanel>
