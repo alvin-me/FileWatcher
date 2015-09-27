@@ -63,6 +63,8 @@ namespace FileWatcher
                 return null;
 
             var path = value as string;
+            if (path == "")
+                return null;
 
             return ConvertToImage(path);
         }
