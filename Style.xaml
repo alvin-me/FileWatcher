@@ -30,7 +30,8 @@
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="{x:Type ListViewItem}">
+    <!--listview style-->   
+    <!--<Style TargetType="{x:Type ListViewItem}">
         <Setter Property="Foreground" Value="White" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding Path=EventType}" Value="Created">
@@ -50,7 +51,7 @@
                 <Setter Property="BorderThickness" Value="2" />
             </Trigger> 
         </Style.Triggers>
-    </Style>
+    </Style>-->
 
     <Style x:Key="OnOffBorder" TargetType="{x:Type Border}">
         <Style.Triggers>

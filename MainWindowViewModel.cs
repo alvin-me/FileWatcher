@@ -29,6 +29,9 @@ namespace FileWatcher
         private readonly ICommand _clearCollectionCmd;
         private readonly ICommand _saveCollectionCmd;
         private readonly ICommand _toggleShowPreviewCmd;
+        private readonly ICommand _deleteFileCmd;
+        private readonly ICommand _openFileCmd;
+        private readonly ICommand _openContaingFolderCmd;
 
         #endregion
 
@@ -43,6 +46,9 @@ namespace FileWatcher
             _clearCollectionCmd = new RelayCommand(ClearCollection, CanClearCollection);
             _saveCollectionCmd = new RelayCommand(SaveCollection, CanSaveCollection);
             _toggleShowPreviewCmd = new RelayCommand(ToggleShowPreview, CanToggleShowPreview);
+            _deleteFileCmd = new RelayCommand(DeleteFile, CanDeleteFile);
+            _openFileCmd = new RelayCommand(OpenFile, CanOpenFile);
+            _openContaingFolderCmd = new RelayCommand(OpenContaingFolder, CanOpenContaingFolder);
             _fileSystemWatcher = createWatcher();
             updateWatcherFromConfigFile();
         }
@@ -224,6 +230,21 @@ namespace FileWatcher
         public ICommand ToggleShowPreviewCmd { get { return _toggleShowPreviewCmd; } }
 
         /// <summary>
+        /// Gets the OpenFileCmd. Used for Open delete selected file Operations
+        /// </summary>
+        public ICommand OpenFileCmd { get { return _openFileCmd; } }
+
+        /// <summary>
+        /// Gets the DeleteFileCmd. Used for Open delete selected file Operations
+        /// </summary>
+        public ICommand DeleteFileCmd { get { return _deleteFileCmd; } }
+
+        /// <summary>
+        /// Gets the OpenContaingFolderCmd. Used for Open delete selected file Operations
+        /// </summary>
+        public ICommand OpenContaingFolderCmd { get { return _openContaingFolderCmd; } }
+
+        /// <summary>
         /// CanToggleWatching operation of the ToggleWatching.
         /// Tells us if the control is to be enabled or disabled.
         /// This method will be fired repeatedly as long as the view is open.
@@ -335,13 +356,30 @@ namespace FileWatcher
             StreamWriter sw = null;
             try
             {
-                string fileName = Properties.Settings.Default.LogFolder + "\\" + DateTime.Now.ToString("yyyyMMdd hh-mm-ss") + ".log";
-                sw = new StreamWriter(fileName);
+                string fileName = Properties.Settings.Default.LogFolder + "\\" + DateTime.Now.ToString("yyyyMMdd hh-mm-ss") + ".html";
+                
+                string content = "<html>\n\t<head>\n\t\t<title>FileWatcher</title>\n\t</head>\n\t" +
+                  "<body>\n\n\t<table cellpadding=3 cellspacing=0 border=1>\n\t\t" +
+                  "<caption>FileWatcher</caption>\n\n\t\t<thead>\n\t\t\t<tr>\n" +
+                  "\t\t\t\t<th>Id</th>\n" +
+                  "\t\t\t\t<th>TimeStamp</th>\n" +
+                  "\t\t\t\t<th>EventType</th>\n" +
+                  "\t\t\t\t<th>FileName</th>\n" +
+                  "\t\t\t\t<th>FilePath</th>\n\t\t\t</tr>\n\t\t</thead>\n\t\t<tbody>\n";
                 foreach (var item in FileInformations)
                 {
-                    string str = "[" + item.Id + "][" + item.EventType + "][" + item.FileName + "][" + item.FilePath + "]";
-                    sw.WriteLine(str);
+                    content += "\t\t\t<tr>\n";
+                    content += "\t\t\t\t<td>" + item.Id + "</td>\n";
+                    content += "\t\t\t\t<td>" + item.TimeStamp + "</td>\n";
+                    content += "\t\t\t\t<td>" + item.EventType + "</td>\n";
+                    content += "\t\t\t\t<td>" + item.FileName + "</td>\n";
+                    content += "\t\t\t\t<td>" + item.FilePath + "</td>\n\t\t\t</tr>\n";
                 }
+                content += "\t\t</tbody>\n\t</table>\n\t</body>\n</html>";
+
+                sw = new StreamWriter(fileName);
+                sw.Write(content);
+
                 LogInfo("日志已保存到" + fileName, 5000);
             }
             catch (Exception e)
@@ -377,6 +415,72 @@ namespace FileWatcher
         public void ToggleShowPreview(object obj)
         {
             ShowPreviewFlag = !ShowPreviewFlag;
+        }
+
+        /// <summary>
+        /// CanDeleteFile operation of the DeleteFile.
+        /// Tells us if the control is to be enabled or disabled.
+        /// This method will be fired repeatedly as long as the view is open.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public bool CanDeleteFile(object obj)
+        {
+            return (FilePath != "") && File.Exists(FilePath);
+        }
+
+        /// <summary>
+        /// Add operation of the DeleteFileCmd.
+        /// Operation that will be performormed on the control click.
+        /// </summary>
+        /// <param name="obj"></param>
+        public void DeleteFile(object obj)
+        {
+            File.Delete(FilePath);
+        }
+
+        /// <summary>
+        /// CanOpenFile operation of the OpenFile.
+        /// Tells us if the control is to be enabled or disabled.
+        /// This method will be fired repeatedly as long as the view is open.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public bool CanOpenFile(object obj)
+        {
+            return (FilePath != "") && File.Exists(FilePath);
+        }
+
+        /// <summary>
+        /// Add operation of the OpenFileCmd.
+        /// Operation that will be performormed on the control click.
+        /// </summary>
+        /// <param name="obj"></param>
+        public void OpenFile(object obj)
+        {
+            System.Diagnostics.Process.Start(FilePath);
+        }
+
+        /// <summary>
+        /// CanOpenContaingFolder operation of the OpenContaingFolder.
+        /// Tells us if the control is to be enabled or disabled.
+        /// This method will be fired repeatedly as long as the view is open.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public bool CanOpenContaingFolder(object obj)
+        {
+            return (FilePath != "") && File.Exists(FilePath);
+        }
+
+        /// <summary>
+        /// Add operation of the OpenContaingFolderCmd.
+        /// Operation that will be performormed on the control click.
+        /// </summary>
+        /// <param name="obj"></param>
+        public void OpenContaingFolder(object obj)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + FilePath);
         }
 
         #endregion

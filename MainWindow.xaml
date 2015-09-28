@@ -74,7 +74,30 @@
             <ListView IsSynchronizedWithCurrentItem="True" local:ListBoxExtender.AutoScrollToCurrentItem="True"
                   ItemsSource="{Binding Path=FileInformations, Mode=OneWay}"
                   SelectedItem="{Binding Path=SelectedFileInformation, Mode=OneWayToSource}"
-                  SelectedIndex="{Binding Path=Id, Mode=TwoWay}" SelectionMode="Single">
+                  SelectedIndex="{Binding Path=Id, Mode=TwoWay}" SelectionMode="Single" x:Name="FileListView">
+                <ListView.Resources>
+                    <ContextMenu x:Key="ItemContextMenu">
+                        <MenuItem Header="打开文件"
+                                  Command="{Binding Path=DataContext.OpenFileCmd, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}">
+                            <MenuItem.Icon>
+                                <Image Source="/FileWatcher;component/Resources/file.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="打开文件位置"
+                                  Command="{Binding Path=DataContext.OpenContaingFolderCmd, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}"/>
+                        <MenuItem Header="删除文件" 
+                                  Command="{Binding Path=DataContext.DeleteFileCmd, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}">
+                            <MenuItem.Icon>
+                                <Image Source="/FileWatcher;component/Resources/delete.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </ListView.Resources>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ID" Width="27" DisplayMemberBinding="{Binding Path=Id}" />
